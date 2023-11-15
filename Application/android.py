@@ -5,20 +5,16 @@ import PIL.Image
 
 
 class Android:
-    def __init__(self, name, serial, ip, amount, script_functions):
+    def __init__(self, name, serial, ip, iterations, script_functions):
         self.name = name
         self.serial = serial
         self.ip = ip
-        self.amount = amount
+        self.iterations = iterations
         self.script_functions = script_functions
         self.script_stopped = True
         self.status_label = None
         self.stop_button = None
-
-        # For ardougne agility
-        # self.pie_number = 3
-        # self.lap_number = 0
-        self.pickup = False
+        self.count = 0
 
     def power_on(self):
         cmd(f"vboxmanage startvm \"{self.name}\"")

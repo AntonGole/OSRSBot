@@ -19,7 +19,6 @@ def instantiate_androids():
 
 
 def connect_androids():
-    count_cooked()
     androids = instantiate_androids()
     cmd("adb disconnect")
     sleep(3)
@@ -45,17 +44,6 @@ def calibrate_coordinates():
     thread.start()
     calibrations.print_coordinates(title_name)
     calibrations.sleep(5000)
-
-
-def count_cooked():
-    total_amount = 0
-    for i in range(1):
-        with open(f"logs/3.txt", "r") as file:
-            logged_amount = file.readline()
-            total_amount += int(logged_amount)
-    with open(f"logs/total.txt", "w") as file:
-        file.seek(0)
-        file.write(str(total_amount))
 
 
 def power_off_comp(*androids):

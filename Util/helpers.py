@@ -1,12 +1,6 @@
 import os
-import random
-import threading
 from random import *
 import time
-from tkinter import PhotoImage
-
-import PIL
-from PIL import Image, ImageTk
 from pyautogui import sleep
 
 
@@ -47,45 +41,6 @@ def add_color_margin(pix, pix_0_value, pix_1_value, pix_2_value, margin):
     return False
 
 
-def find_square():
-    img = PIL.Image.open(f"images/map-marker-icon2x.png")
-
-    for x in range(img.height):
-        for y in range(img.width):
-            if not img.getpixel((x, y)) == (2, 2, 2):
-                img.putpixel((x, y), (0, 162, 232))
-
-    img.save("images/map-marker-icon2x.png")
-
-
-def update_timer(login_time, android):
-    logout_time = int(time.time()) + login_time
-
-    while True:
-        time_left = logout_time - int(time.time())
-
-        if android.script_stopped:
-            android.time_label["text"] = "0:00:00"
-            return
-        if time_left <= 0:
-            return
-
-        hours = time_left // 3600
-        if (time_left // 60) % 60 < 10:
-            minutes = f"0{(time_left // 60) % 60}"
-        else:
-            minutes = (time_left // 60) % 60
-
-        if time_left % 60 < 10:
-            seconds = f"0{time_left % 60}"
-        else:
-            seconds = time_left % 60
-
-        android.time_label["text"] = f"{hours}:{minutes}:{seconds}"
-
-        time.sleep(1)
-
-
 def stopwatch(android):
     start_time = int(time.time())
     while True:
@@ -109,20 +64,6 @@ def stopwatch(android):
         android.stopwatch_label["text"] = f"{hours}:{minutes}:{seconds}"
 
         time.sleep(1)
-
-
-def screenshot_loop(gui, android, index):
-    while True:
-        time.sleep(30)
-        cmd(f"vboxmanage controlvm \"{android.name}\" screenshotpng label_images/{android.name[-1]}.png")
-        img = Image.open(f"label_images/{android.name[-1]}.png")
-        img = img.resize((229, 172), Image.ANTIALIAS)
-        #img = img.resize((512, 382), Image.ANTIALIAS)
-        new_image = ImageTk.PhotoImage(img)
-
-        gui.image_labels[index].configure(image=new_image)
-        gui.image_labels[index].image = new_image
-        os.remove(f"label_images/{android.name[-1]}.png")
 
 
 # Function for waiting for a step to be done, should be implemented into every step.
