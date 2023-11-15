@@ -1,16 +1,7 @@
-import random
-import sys
-
-import numpy as np
-
 from osrs.steps import *
 
-import threading
 from pyautogui import *
 from pynput.keyboard import Listener, Controller, Key
-from tkinter import *
-import win32gui
-from desktopmagic.screengrab_win32 import getRectAsImage
 
 
 def OSRS_agility_seers(android):
@@ -783,38 +774,6 @@ def OSRS_logout(android, t1, t2, manual):
     android.status_label["text"] = "Logout"
     if not manual:
         sleep_with_checks(android, randint(t1, t2) / 1000)
-
-
-def setup(android):
-    android.status_label["text"] = "Setup"
-    if android.script_number == 5:
-        pix = android.screenshot()
-        if add_color_margin(pix[24, 426], 138, 124, 104, 10):
-            android.input_press("KEYCODE_F3", 800, 1500)
-
-    elif android.script_number == 1:
-        OSRS_toggle_mode(android, 800, 1500, True)
-        lastX, lastY = OSRS_click_compass(android, 800, 1500)
-        OSRS_click_look_south(android, lastX, lastY, 800, 1500)
-        OSRS_toggle_mode(android, 300, 800, False)
-        pix = android.screenshot()
-        if add_color_margin(pix[975, 336], 138, 124, 104, 10):
-            android.input_press("KEYCODE_F1", 800, 1500)
-
-    elif (android.script_number == 2) or (android.script_number == 3):
-        OSRS_toggle_mode(android, 800, 1500, True)
-        lastX, lastY = OSRS_click_compass(android, 800, 1500)
-        OSRS_click_look_west(android, lastX, lastY, 800, 1500)
-        OSRS_toggle_mode(android, 300, 800, False)
-        pix = android.screenshot()
-        if add_color_margin(pix[975, 336], 138, 124, 104, 10):
-            android.input_press("KEYCODE_F1", 800, 1500)
-
-    elif android.script_number == 6:
-        OSRS_click_compass(android, 800, 1500)
-        pix = android.screenshot()
-        if add_color_margin(pix[975, 336], 138, 124, 104, 10):
-            android.input_press("KEYCODE_F1", 800, 1500)
 
 
 def OSRS_test(android):
