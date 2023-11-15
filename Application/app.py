@@ -9,12 +9,11 @@ from PIL import Image, ImageTk
 class App(Tk):
     def __init__(self, androids):
         super().__init__()
-        self.title('OSRS Bot')
+        self.title('OSRSBot')
         self.geometry(f"{236 * len(androids)}x413")
         self.resizable(False, False)
         self.configure(bg='#1D2025')
 
-        self.frames = []
         self.start_buttons = []
         self.stop_buttons = []
         self.reset_buttons = []
@@ -22,7 +21,7 @@ class App(Tk):
 
         self.add_options()
 
-        # move window center
+        # Move window center
         winWidth = self.winfo_reqwidth()
         winwHeight = self.winfo_reqheight()
         posRight = int(self.winfo_screenwidth() / 2 - winWidth / 2)
@@ -151,6 +150,7 @@ def disable_buttons(*buttons):
         button.configure(bg="#5e5e5e", state=DISABLED, cursor="arrow")
 
 
+# Toggle button highlights
 def toggle_button_highlight(event, high):
     if high and event.widget["state"] == NORMAL:
         event.widget["bg"] = "#cea6ff"
@@ -158,19 +158,10 @@ def toggle_button_highlight(event, high):
         event.widget["bg"] = "#BB86FC"
 
 
-def manual_logout(app, index, android):
-    OSRS_logout(android, 800, 1500, True)
-    app.enable_buttons(app.login_buttons[index])
-
-
-def manual_login(app, index, android):
-    OSRS_login(android, 800, 1500, True)
-    app.enable_buttons(app.logout_buttons[index], app.start_buttons[index])
-
-
+# Stop the script
 def stop_script(app, index, android):
     while True:
         if android.status_label["text"] == "Stopped":
             break
         sleep(0.1)
-    app.enable_buttons(app.start_buttons[index])
+    enable_buttons(app.start_buttons[index])
