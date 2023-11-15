@@ -1,9 +1,11 @@
+import threading
 from functools import partial
 from tkinter import *
 from tkinter.font import Font
 import tkinter.font as font
 from osrs.functions import *
 from PIL import Image, ImageTk
+from Util.helpers import cmd
 
 
 class App(Tk):
@@ -131,7 +133,7 @@ class App(Tk):
     # Method called when clicking the stop button
     def stop_button_function(self, index, android):
         disable_buttons(self.stop_buttons[index])
-        android.status_label["text"] = "Stopping"
+        android.update_status("Stopping")
         android.script_stopped = True
         thread = threading.Thread(
             target=lambda: stop_script(self, index, android), args=(), daemon=True)
@@ -160,8 +162,10 @@ def toggle_button_highlight(event, high):
 
 # Stop the script
 def stop_script(app, index, android):
+    print(f"Stopping script for {android.name}, please wait for the current iteration of the script to finish")
     while True:
         if android.status_label["text"] == "Stopped":
             break
         sleep(0.1)
     enable_buttons(app.start_buttons[index])
+    print(f"Script stopped for {android.name}")

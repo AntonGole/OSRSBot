@@ -6,34 +6,65 @@ from Application.app import App
 
 from Application.android import Android
 
-from PIL import Image
-
 test_script = [
-    [OSRS_test]
+    [OSRS_test],
+    [update_info]
 ]
 
 
-def instantiate_androids():
-    android = Android("Android 4", "192.168.0.246:5555", "192.168.0.246", 10000, test_script)
-    return [android]
+def instantiate_androids(androids_info):
+    androids = []
+    # for android in androids_info:
+    #     a = Android(android['title'], android['ip_address'], android['serial_number'], 10000, test_script)
+    #     androids.append(a)
+    androids.append(Android("Android 4", "192.168.0.246", "192.168.0.246:5555", 10000, test_script))
+    return androids
 
 
-def connect_androids():
-    androids = instantiate_androids()
-    cmd("adb disconnect")
-    sleep(3)
-    cmd("adb kill-server")
-    sleep(3)
-
+def connect_androids(androids):
     for android in androids:
-        android.connect()
+        if not android.connect():
+            return False
+    return True
 
 
 def main():
-    androids = instantiate_androids()
-    #connect_androids()
-    app = App(androids)
-    app.run()
+    androids_info = []
+
+    # while True:
+    #     # Ask the user for the title of the Android machine
+    #     title = input("Please input the title of the Android machine: ")
+    #
+    #     # Ask the user for the IP address of the Android machine
+    #     ip_address_input = input(f"Please input ip address of Android machine '{title}': ")
+    #
+    #     # Remove spaces from the input
+    #     ip_address = ip_address_input.replace(" ", "")
+    #
+    #     # Create another string for the serial number and append ":5555" to it
+    #     serial_number = ip_address + ":5555"
+    #
+    #     # Store the details in a dictionary and add it to the list
+    #     android_details = {
+    #         "title": title,
+    #         "ip_address": ip_address,
+    #         "serial_number": serial_number
+    #     }
+    #     androids_info.append(android_details)
+    #
+    #     # Ask the user if they want to register more androids
+    #     continue_input = input("Do you want to register more androids? (Y/N): ")
+    #     if continue_input.upper() != 'Y':
+    #         break
+
+    androids = instantiate_androids(androids_info)
+    if connect_androids(androids):
+        print("Success! Application started.\n")
+        app = App(androids)
+        app.run()
+    else:
+        print("Make sure the info you are typing is correct.\n")
+        main()
 
 
 def calibrate_coordinates():
@@ -46,41 +77,6 @@ def calibrate_coordinates():
     calibrations.sleep(5000)
 
 
-def power_off_comp(*androids):
-    for android in androids:
-        android.stop_script()
-        android.power_off()
-    sleep(30)
-    cmd("shutdown /s")
-
-
-def test():
-    androids = instantiate_androids()
-    connect_androids()
-
-    total = 0
-
-    for x in range(100):
-        start = time.time_ns()
-        pix = androids[0].screenshot()
-        end = time.time_ns()
-        total += (end - start)
-
-    print(total / 100)
-
-
-def project_recolour():
-    img = PIL.Image.open(f"images/map-marker-icon2x.png")
-
-    for x in range(img.width - 1):
-        for y in range(img.height - 1):
-            if not img.getpixel((x, y)) == (2, 2, 2):
-                img.putpixel((x, y), (0, 162, 232))
-
-    img.save("images/map-marker-icon2x.png")
-
-
 if __name__ == '__main__':
     #calibrate_coordinates()
     main()
-    #test()
