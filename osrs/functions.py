@@ -1,8 +1,7 @@
-from pyautogui import *
+from Util.helpers import *
 
 
-def OSRS_test(android):
+def test_function(android):
     print("test")
     android.input_tap(183, 517)
-    sleep(5)
-    android.input_tap(183, 600)
+    android.screenshot()

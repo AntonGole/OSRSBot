@@ -6,17 +6,18 @@ import PIL.Image
 
 
 class Android:
-    def __init__(self, name, ip, serial, max_iterations, script_functions):
+    def __init__(self, name, ip, serial, max_iterations, script):
         # Initialize the Android object with various properties
         self.name = name  # Name of the Android VM
         self.serial = serial  # Serial number for ADB
         self.ip = ip  # IP address for ADB connection
         self.max_iterations = max_iterations  # Maximum iterations for the script
-        self.script_functions = script_functions  # Functions to run in the script
+        self.script = script  # Script to run
         self.script_stopped = True  # Flag to check if the script is stopped
         self.status_label = None  # Tkinter label to display status
         self.stop_button = None  # Tkinter button to stop the script
         self.iterations = 0  # Counter for the number of iterations
+        self.start = 0      # Timestamp when script was started
 
     def power_on(self):
         # Power on the Android VM using VirtualBox command
@@ -66,9 +67,18 @@ class Android:
         os.system(commandString)
 
     def run_script(self):
-        # Run a script in a separate thread
-        script = Script(self.script_functions, self)
-        thread = threading.Thread(target=lambda: script.run(), args=(), daemon=True)
+        # Method to start running the script
+        print(f"Script started for {self.name}")
+        self.start = time.time()  # Record the start time
+        self.update_status("Running")  # Update the status to "Running"
+
+        # Start a separate thread to run a stopwatch for the script
+        stopwatch_thread = threading.Thread(
+            target=lambda: start_stopwatch(self), args=(), daemon=True)
+        stopwatch_thread.start()
+
+        # Run the script in a separate thread
+        thread = threading.Thread(target=lambda: self.script.run(self), args=(), daemon=True)
         thread.start()
 
     def stop_script(self):
