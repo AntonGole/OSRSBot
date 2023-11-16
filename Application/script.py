@@ -3,10 +3,11 @@ from Util.helpers import *
 
 
 class Script:
-    def __init__(self, functions):
+    def __init__(self, functions, name):
         # Initialize the Script object with a list of functions
         self.functions = functions  # List of functions to be executed as part of the script
         self.started = False  # Flag indicating whether script is started or not
+        self.name = name
 
     def run(self, android):
         self.started = True

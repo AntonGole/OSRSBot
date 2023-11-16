@@ -1,5 +1,3 @@
-import Util.calibration as calibrations
-
 from Application.script import *
 
 from Application.app import App
@@ -8,13 +6,13 @@ from Application.android import Android
 
 from osrs.functions import *
 
-script1 = Script([[test_function]])
+test = Script([[test_function]], "example")
 
 
 def instantiate_androids(androids_info):
     androids = []
     for android in androids_info:
-        a = Android(android['title'], android['ip_address'], android['serial_number'], 10000, script1)
+        a = Android(android['title'], android['ip_address'], android['serial_number'], 10000, test)
         androids.append(a)
     return androids
 
@@ -56,6 +54,7 @@ def main():
             break
 
     androids = instantiate_androids(androids_info)
+
     if connect_androids(androids):
         print("Success! Application started.\n")
         app = App(androids)
@@ -63,16 +62,6 @@ def main():
     else:
         print("Make sure the info you are typing is correct.\n")
         main()
-
-
-def calibrate_coordinates():
-    title_name = "Android 4 [Running] - Oracle VM VirtualBox"
-    coordinateString = []
-    thread = threading.Thread(target=lambda: calibrations.input_thread(
-        coordinateString, title_name), args=(), daemon=True)
-    thread.start()
-    calibrations.print_coordinates(title_name)
-    calibrations.sleep(5000)
 
 
 if __name__ == '__main__':

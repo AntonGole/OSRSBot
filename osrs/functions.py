@@ -2,6 +2,6 @@ from Util.helpers import *
 
 
 def test_function(android):
-    print("test")
     android.input_tap(183, 517)
+    sleep_random(200, 500)
     android.screenshot()

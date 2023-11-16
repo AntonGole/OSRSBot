@@ -59,24 +59,30 @@ class App(Tk):
             stopwatch_label.grid(column=1, row=3, pady=(10, 0), padx=(10, 10))
             android.stopwatch_label = stopwatch_label
 
-            # status labels, shows status of android
+            # Status labels, shows status of android
             status_label_info = Label(android_frame, text="Status:", width=8)
             status_label_info.grid(column=0, row=4, pady=(10, 0), padx=(10, 10))
             status_label = Label(android_frame, text="Stopped", width=8, relief=SUNKEN)
             status_label.grid(column=1, row=4, pady=(10, 0), padx=(10, 10))
             android.status_label = status_label
 
+            # Script labels, shows script of android
+            status_script_info = Label(android_frame, text="Script:", width=8)
+            status_script_info.grid(column=0, row=5, pady=(10, 0), padx=(10, 10))
+            status_script = Label(android_frame, text=android.script.name, width=8, relief=SUNKEN)
+            status_script.grid(column=1, row=5, pady=(10, 0), padx=(10, 10))
+
             # Start button, start script for android
             start_button = Button(android_frame, text="Start", command=partial(self.start_button_function, index, android),
                                   bg="#BB86FC", height=1, width=8, disabledforeground="#404040")
-            start_button.grid(column=0, row=5, padx=(10, 10), pady=(10, 0), columnspan=1)
+            start_button.grid(column=0, row=6, padx=(10, 10), pady=(10, 0), columnspan=1)
             start_button.bind('<Enter>', lambda event, high=True: toggle_button_highlight(event, high))
             start_button.bind('<Leave>', lambda event, high=False: toggle_button_highlight(event, high))
 
             # Stop button, stop script for android
             stop_button = Button(android_frame, text="Stop", command=partial(self.stop_button_function, index, android),
                                  bg="#5e5e5e", height=1, width=8, disabledforeground="#404040")
-            stop_button.grid(column=1, row=5, padx=(10, 10), pady=(10, 0), columnspan=1)
+            stop_button.grid(column=1, row=6, padx=(10, 10), pady=(10, 0), columnspan=1)
             stop_button.bind('<Enter>', lambda event, high=True: toggle_button_highlight(event, high))
             stop_button.bind('<Leave>', lambda event, high=False: toggle_button_highlight(event, high))
             stop_button["state"] = DISABLED
@@ -91,13 +97,18 @@ class App(Tk):
             reset_button.bind('<Leave>', lambda event, high=False: toggle_button_highlight(event, high))
 
             # Android image label
-            cmd(f"vboxmanage controlvm \"{android.name}\" screenshotpng label_images/{android.name[-1]}.png")
-            img = Image.open(f"label_images/{android.name[-1]}.png")
+            cmd(f"vboxmanage controlvm \"{android.name}\" screenshotpng images/{android.name[-1]}.png")
+            img = Image.open(f"images/{android.name[-1]}.png")
             img = img.resize((229, 172), Image.ANTIALIAS)
             new_image = ImageTk.PhotoImage(img)
             label = Label(frm, image=new_image)
-            label.grid(column=index, row=6)
+            label.grid(column=index, row=7)
             label.image = new_image
+            self.image_labels.append(label)
+
+            # Start the image update thread
+            image_update_thread = threading.Thread(target=update_image_label, args=(label, android), daemon=True)
+            image_update_thread.start()
 
             # Add all buttons and labels to the window
             self.start_buttons.append(start_button)
@@ -169,3 +180,18 @@ def stop_script(app, index, android):
         sleep(0.1)
     enable_buttons(app.start_buttons[index])
     print(f"Script stopped for {android.name}")
+
+
+def update_image_label(label, android):
+    while True:
+        try:
+            cmd(f"vboxmanage controlvm \"{android.name}\" screenshotpng images/{android.name[-1]}.png")
+            img = Image.open(f"images/{android.name[-1]}.png")
+            img = img.resize((229, 172), Image.ANTIALIAS)
+            new_image = ImageTk.PhotoImage(img)
+            label.configure(image=new_image)
+            label.image = new_image
+            sleep(1)
+        except Exception as e:
+            print(f"Error updating image for {android.name}: {e}")
+            break
