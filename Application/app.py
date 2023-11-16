@@ -11,29 +11,31 @@ from Util.helpers import cmd
 class App(Tk):
     def __init__(self, androids):
         super().__init__()
+        # Set up the main window of the application
         self.title('OSRSBot')
-        self.geometry(f"{236 * len(androids)}x413")
+        self.geometry(f"{236 * len(androids)}x413")  # Adjust size based on number of androids
         self.resizable(False, False)
         self.configure(bg='#1D2025')
 
+        # Initialize lists to hold UI elements
         self.start_buttons = []
         self.stop_buttons = []
         self.reset_buttons = []
         self.image_labels = []
 
-        self.add_options()
+        self.add_options()  # Add styling options
 
-        # Move window center
+        # Calculate and set the position to center the window
         winWidth = self.winfo_reqwidth()
-        winwHeight = self.winfo_reqheight()
+        winHeight = self.winfo_reqheight()
         posRight = int(self.winfo_screenwidth() / 2 - winWidth / 2)
-        posDown = int(self.winfo_screenheight() / 2 - winwHeight / 2)
+        posDown = int(self.winfo_screenheight() / 2 - winHeight / 2)
         self.geometry("+{}+{}".format(posRight, posDown))
 
         frm = Frame(self, bg='#1D2025')
         frm.grid()
 
-        # Create labels and buttons for every android object created
+        # Create UI elements for each Android device
         for index, android in enumerate(androids):
             android_frame = Frame(frm)
             if (index % 2) == 0:
@@ -42,7 +44,7 @@ class App(Tk):
                 android_frame.configure(bg='#24272C')
             android_frame.grid(row=0, column=index)
 
-            # Name label, shows name of android
+            # Create and place UI elements like labels and buttons for each Android
             Label(android_frame, text=f"{android.name}", width=8).grid(column=0, row=0, columnspan=2, pady=(10, 0), padx=(10, 10))
 
             # Amount labels,
@@ -106,7 +108,7 @@ class App(Tk):
             label.image = new_image
             self.image_labels.append(label)
 
-            # Start the image update thread
+            # Start a thread to continuously update the image label
             image_update_thread = threading.Thread(target=update_image_label, args=(label, android), daemon=True)
             image_update_thread.start()
 
@@ -116,11 +118,11 @@ class App(Tk):
             self.reset_buttons.append(reset_button)
             self.image_labels.append(label)
 
-    # Start the tkinter application
+    # Function to start the main loop of the Tkinter application
     def run(self):
         self.mainloop()
 
-    # Add styles to the UI
+    # Function to add styling options to the UI
     def add_options(self):
         default_font = Font(family="Helvetica", size=15)
         self.option_add("*Font", default_font)
@@ -182,6 +184,7 @@ def stop_script(app, index, android):
     print(f"Script stopped for {android.name}")
 
 
+# Function to continuously update the image label
 def update_image_label(label, android):
     while True:
         try:
