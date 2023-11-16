@@ -6,10 +6,11 @@ from application.android import Android
 
 from functions.functions import *
 
-test = Script([[test_function]], "example")
+test = Script([[test_function]], "example")  # Initialize a test script
 
 
 def instantiate_androids(androids_info):
+    # Create and return Android objects from provided info
     androids = []
     for android in androids_info:
         a = Android(android['title'], android['ip_address'], android['serial_number'], 10000, test)
@@ -18,6 +19,7 @@ def instantiate_androids(androids_info):
 
 
 def connect_androids(androids):
+    # Connect to all Android instances, return False if any connection fails
     for android in androids:
         if not android.connect():
             return False
@@ -25,8 +27,9 @@ def connect_androids(androids):
 
 
 def main():
-    androids_info = []
+    # Main function to run the application
 
+    androids_info = []
     while True:
         # Ask the user for the title of the Android machine
         title = input("Please input the title of the Android machine: ")
@@ -53,15 +56,19 @@ def main():
         if continue_input.upper() != 'Y':
             break
 
+    # Instantiate Android objects based on user-provided information
     androids = instantiate_androids(androids_info)
 
+    # Attempt to establish connections with all instantiated Android devices
     if connect_androids(androids):
-        print("Success! application started.\n")
-        app = App(androids)
-        app.run()
+        # If all Android devices are successfully connected, start the application
+        print("Success! Application started.\n")
+        app = App(androids)  # Initialize the main application with connected Android devices
+        app.run()  # Run the application's main loop
     else:
+        # If any Android device fails to connect, prompt the user to check the information entered
         print("Make sure the info you are typing is correct.\n")
-        main()
+        main()  # Restart the main function for user to re-enter information
 
 
 if __name__ == '__main__':
