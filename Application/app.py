@@ -3,7 +3,7 @@ from functools import partial
 from tkinter import *
 from tkinter.font import Font
 import tkinter.font as font
-from osrs.functions import *
+from functions.functions import *
 from PIL import Image, ImageTk
 from Util.helpers import cmd
 

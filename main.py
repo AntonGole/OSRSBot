@@ -4,7 +4,7 @@ from Application.app import App
 
 from Application.android import Android
 
-from osrs.functions import *
+from functions.functions import *
 
 test = Script([[test_function]], "example")
 
