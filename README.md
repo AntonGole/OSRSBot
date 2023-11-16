@@ -75,10 +75,6 @@ Before installing OSRSBot, ensure you have the following installed:
 - VirtualBox: For managing Android VMs.
 - ADB: For communicating with Android VMs.
 
-## Contributing
-
-Contributions to OSRSBot are welcome! Please read [CONTRIBUTING.md](link-to-contributing-file) for details on our code of conduct and the process for submitting pull requests.
-
 ## License
 
 This project is licensed under the [MIT License](LICENSE.md).
