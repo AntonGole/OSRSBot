@@ -1,8 +1,8 @@
-from Application.script import *
+from application.script import *
 
-from Application.app import App
+from application.app import App
 
-from Application.android import Android
+from application.android import Android
 
 from functions.functions import *
 
@@ -56,7 +56,7 @@ def main():
     androids = instantiate_androids(androids_info)
 
     if connect_androids(androids):
-        print("Success! Application started.\n")
+        print("Success! application started.\n")
         app = App(androids)
         app.run()
     else:

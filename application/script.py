@@ -1,5 +1,5 @@
 import threading
-from Util.helpers import *
+from utils.helpers import *
 
 
 class Script:

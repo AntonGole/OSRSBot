@@ -1,4 +1,4 @@
-from Util.helpers import *
+from utils.helpers import *
 
 
 def test_function(android):

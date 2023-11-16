@@ -1,7 +1,7 @@
 import subprocess
 from tkinter import NORMAL
 
-from Application.script import *
+from application.script import *
 import PIL.Image
 
 

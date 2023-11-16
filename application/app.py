@@ -5,7 +5,7 @@ from tkinter.font import Font
 import tkinter.font as font
 from functions.functions import *
 from PIL import Image, ImageTk
-from Util.helpers import cmd
+from utils.helpers import cmd
 
 
 class App(Tk):
