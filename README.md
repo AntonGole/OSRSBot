@@ -77,4 +77,4 @@ Before installing OSRSBot, ensure you have the following installed:
 
 ## License
 
-This project is licensed under the [MIT License](LICENSE.md).
+This project is licensed under the [MIT License](LICENSE).
